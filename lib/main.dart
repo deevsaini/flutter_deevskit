@@ -1,3 +1,4 @@
+import 'package:deevskit/pages/nav_bar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,13 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DeevsKit',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: const MyHomePage(title: 'github.com/deevsaini'),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'DeevsKit',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+        ),
+        home: const HomePage());
   }
 }
 
