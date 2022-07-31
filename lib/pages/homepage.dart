@@ -24,22 +24,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController tabController;
   late List<NavItem> navItems;
 
-  bool isDark = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
     _menuScaleAnimation =
         Tween<double>(begin: 0.5, end: 1).animate(_controller);
-    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
-        .animate(_controller);
-    tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(_controller);
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
     navItems = [
-      NavItem('Home', Icons.home, DashboardPage()),
-      NavItem('Apps', Icons.apps, CustomAppsHome()),
+      NavItem('Home', Icons.home, const DashboardPage()),
+      NavItem('Apps', Icons.apps, const CustomAppsHome()),
     ];
 
     tabController.addListener(() {
@@ -71,10 +70,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     screenHeight = size.height;
     screenWidth = size.width;
     return Scaffold(
+      bottomNavigationBar: SafeArea(
+        child: TabBar(
+          controller: tabController,
+          indicator: const DeevTabIndicator(
+              indicatorColor: Colors.deepPurple,
+              indicatorStyle: DeevTabIndicatorStyle.circle,
+              indicatorHeight: 2,
+              radius: 4,
+              yOffset: -12,
+              width: 20),
+          tabs: buildTabs(),
+        ),
+      ),
       appBar: AppBar(
         title: Text(navItems[currentIndex].title.toString()),
         leading: InkWell(
-          child: Icon(Icons.menu),
+          child: Container(
+              margin: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade100,
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Icon(Icons.menu)),
           onTap: () {
             setState(() {
               if (isCollapsed)
@@ -88,6 +106,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       body: Stack(
+        alignment: Alignment.topCenter,
         children: [
           menu(context),
           AnimatedPositioned(
@@ -100,30 +119,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               scale: _scaleAnimation,
               child: Material(
                 animationDuration: duration,
-                elevation: 4,
+                borderRadius: BorderRadius.circular(!isCollapsed ? 20 : 0),
+                clipBehavior: Clip.hardEdge,
+                elevation: !isCollapsed ? 4 : 0,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   physics: const NeverScrollableScrollPhysics(),
                   child: SizedBox(
-                    height: screenHeight! - 100,
-                    child: Scaffold(
-                      body: TabBarView(
-                        children: navItems.map((e) => e.screen).toList(),
-                        controller: tabController,
-                      ),
-                      bottomNavigationBar: SafeArea(
-                        child: TabBar(
-                          controller: tabController,
-                          indicator: const DeevTabIndicator(
-                              indicatorColor: Colors.deepPurple,
-                              indicatorStyle: DeevTabIndicatorStyle.circle,
-                              indicatorHeight: 2,
-                              radius: 4,
-                              yOffset: -12,
-                              width: 20),
-                          tabs: buildTabs(),
-                        ),
-                      ),
+                    height: screenHeight!,
+                    child: TabBarView(
+                      controller: tabController,
+                      children: navItems.map((e) => e.screen).toList(),
                     ),
                   ),
                 ),
@@ -166,12 +172,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text("Dashboard",
-                      style: TextStyle(color: Colors.white, fontSize: 22)),
-                  SizedBox(height: 10),
-                  Text("Messages",
-                      style: TextStyle(color: Colors.white, fontSize: 22)),
-                  SizedBox(height: 10),
-                  Text("Services",
                       style: TextStyle(color: Colors.white, fontSize: 22)),
                   SizedBox(height: 10),
                   Text("Abouts Us",
