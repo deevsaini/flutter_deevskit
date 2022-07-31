@@ -1,8 +1,14 @@
-import 'package:deevskit/pages/nav_bar.dart';
+import 'package:deevskit/pages/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
+  Future.delayed(Duration(seconds: 1), () {
+    FlutterNativeSplash.remove();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +21,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'DeevsKit',
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.deepPurple),
           primarySwatch: Colors.deepPurple,
         ),
         home: const HomePage());
